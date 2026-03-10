@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz: Seu Perfil de Dependência</title>
+    
+    <!-- Importando Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Ícones -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* --- VARIAVEIS & RESET --- */
+        :root {
+            --primary: #0f766e;       /* Teal Profundo */
+            --primary-light: #14b8a6; /* Teal Vibrante */
+            --accent: #f59e0b;        /* Laranja Suave para destaque */
+            --alert: #ef4444;         /* Vermelho Alerta */
+            --bg-body: #111827;       /* Fundo quase preto */
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --surface: #f8fafc;       /* Cinza muito claro para botões */
+            
+            --font-main: 'Poppins', sans-serif;
+            --radius: 16px;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: var(--font-main);
+            /* Fundo moderno com profundidade */
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(172,66%,40%,0.3) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(210,100%,23%,0.3) 0px, transparent 50%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-main);
+        }
+
+        /* --- CONTAINER DO QUIZ --- */
+        .quiz-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 600px; /* Levemente menor para focar a visão */
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px; /* Mais respiro */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: height 0.3s ease;
+        }
+
+        /* Barra de Progresso Minimalista */
+        .progress-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* --- HEADER --- */
+        .badge {
+            display: inline-block;
+            background: #f0fdfa;
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            border: 1px solid #ccfbf1;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            line-height: 1.25;
+            margin-bottom: 15px;
+            color: #0f172a;
+        }
+
+        .intro {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .highlight-red { color: var(--alert); font-weight: 600; text-decoration: line-through; opacity: 0.7; }
+        .highlight-teal { color: var(--primary); font-weight: 700; }
+
+        /* --- PERGUNTAS & OPÇÕES --- */
+        .question-box { display: none; }
+        .question-box.active { 
+            display: block; 
+            animation: slideUpFade 0.5s ease forwards;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 25px;
+            color: #0f172a;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .option-btn {
+            background: var(--surface);
+            border: 2px solid transparent;
+            padding: 18px 24px;
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: all 0.25s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Círculo simulando Radio Button */
+        .option-btn::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #cbd5e1;
+            border-radius: 50%;
+            margin-left: 15px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .option-btn:hover {
+            background: #fff;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .option-btn.selected {
+            background: #f0fdfa;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .option-btn.selected::after {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            box-shadow: inset 0 0 0 4px #fff;
+        }
+
+        /* --- RESULTADO --- */
+        .result-box {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .result-icon-container {
+            width: 80px;
+            height: 80px;
+            background: #fee2e2;
+            color: var(--alert);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 20px auto;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: #0f172a;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .result-description {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* GRÁFICO MODERNIZADO */
+        .graph-container {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 0 0 30px 0;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .graph-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar-group { margin-bottom: 15px; }
+        .bar-group:last-child { margin-bottom: 0; }
+
+        .bar-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .track {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            border-radius: 10px;
+            width: 0%; /* JS anima */
+        }
+        .fill.low { background: #94a3b8; animation: fillLow 1.5s forwards; }
+        .fill.high { 
+            background: linear-gradient(90deg, #14b8a6, #0d9488); 
+            animation: fillHigh 2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
+        }
+
+        @keyframes fillLow { to { width: 5%; } }
+        @keyframes fillHigh { to { width: 94%; } }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: #f0fdfa;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #134e4a;
+            text-align: left;
+            font-weight: 500;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* CTA BUTTON */
+        .btn-cta {
+            background: #10b981; /* Verde Success */
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 22px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+            transition: transform 0.2s;
+            animation: pulse-soft 2s infinite;
+        }
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.5);
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes pulse-soft {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 480px) {
+            .quiz-card { 
+                padding: 30px 20px; 
+                border-radius: 20px;
+                min-height: 85vh; /* Mais imersivo no mobile */
+                justify-content: center;
+            }
+            h1 { font-size: 1.5rem; }
+            .option-btn { padding: 16px 20px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-card">
+        <!-- Barra de Progresso no Topo -->
+        <div class="progress-wrapper">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- HEADER INICIAL (Desaparece no resultado) -->
+        <div id="quiz-header">
+            <div class="badge">Mapeamento Rápido</div>
+            <h1>Você controla o cigarro ou ele controla você?</h1>
+            
+            <p class="intro">
+                Descubra em 30 segundos o bloqueio mental oculto.<br>
+                Pare de nutrir o <span class="highlight-red">hábito</span> e retome o <span class="highlight-teal">controle</span>.
+            </p>
+        </div>
+
+        <!-- CONTEÚDO DINÂMICO -->
+        <div id="quiz-content"></div>
+
+        <!-- TELA DE RESULTADO -->
+        <div id="quiz-result" class="result-box">
+            <div class="result-icon-container">
+                <i class="fas fa-brain"></i>
+            </div>
+            
+            <div class="result-title">Diagnóstico: Vício Subconsciente</div>
+            
+            <div class="result-description">
+                <p>Suas respostas indicam que o cigarro se tornou uma <strong>muleta emocional</strong> enraizada na sua neurobiologia. Tentar parar apenas com "força de vontade" gera atrito mental, causando recaídas.</p>
+            </div>
+            
+            <!-- Gráfico Visualmente Melhorado -->
+            <div class="graph-container">
+                <div class="graph-header">
+                    <span>Probabilidade de Sucesso</span>
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                
+                <div class="bar-group">
+                    <div class="bar-info">
+                        <span style="color: #64748b;">Método Tradicional</span>
+                        <span>3%</span>
+                    </div>
+                    <div class="track"><div class="fill low"></div></div>
+                </div>
+                
+                <div class="bar-group" style="margin-top: 15px;">
+                    <div class="bar-info">
+                        <span style="color: var(--primary);">Método Respira</span>
+                        <span style="color: var(--primary);">93%</span>
+                    </div>
+                    <div class="track"><div class="fill high"></div></div>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <i class="fas fa-check-circle" style="margin-right:8px"></i>
+                Não lute contra o vício. Reprograme sua mente para esquecer que ele existe em 21 dias.
+            </div>
+
+            <a href="https://metodolp.vercel.app/" class="btn-cta">
+                Reprogramar Minha Mente
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            
+            <p style="margin-top: 15px; font-size: 0.75rem; color: #94a3b8;">Acesso imediato e seguro.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Lógica do Quiz Otimizada (Agora com 4 perguntas)
+        const questions = [
+            {
+                question: "1. Qual sua relação com o cigarro pela manhã?",
+                options: [
+                    "É a primeira coisa que faço (em 30 min).",
+                    "Fumo logo após o café para 'ativar'.",
+                    "Consigo esperar até sair de casa.",
+                    "Sem horário fixo, fumo por estresse."
+                ]
+            },
+            {
+                question: "2. Qual é o principal gatilho que te faz fumar hoje?",
+                options: [
+                    "Estresse, ansiedade ou nervosismo.",
+                    "O cafezinho ou bebidas alcoólicas.",
+                    "Tédio ou momentos de 'pausa'.",
+                    "Sentimento de solidão ou tristeza."
+                ]
+            },
+            {
+                question: "3. O que acontece ao tentar parar?",
+                options: [
+                    "A ansiedade fica insuportável.",
+                    "Sinto que perco minha paz/relaxamento.",
+                    "Consigo uns dias, mas recaio na crise.",
+                    "Nunca tentei por medo de falhar."
+                ]
+            },
+            {
+                question: "4. Se pudesse desligar a vontade hoje, você faria?",
+                options: [
+                    "Sim! Não aguento mais gastar saúde.",
+                    "Com certeza, quero ser livre.",
+                    "Sim, se for natural e sem remédios.",
+                    "Tenho medo, mas preciso urgente."
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        const quizContent = document.getElementById('quiz-content');
+        const progressBar = document.getElementById('progressBar');
+        const quizHeader = document.getElementById('quiz-header');
+        const quizResult = document.getElementById('quiz-result');
+
+        function loadQuestion() {
+            // Atualiza barra (UX visual: começa com um pouco preenchido)
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            quizContent.innerHTML = ''; // Limpa anterior
+
+            const q = questions[currentQuestionIndex];
+            
+            // Container da pergunta com animação
+            const qBox = document.createElement('div');
+            qBox.className = 'question-box active';
+
+            // Texto da Pergunta
+            const qTitle = document.createElement('div');
+            qTitle.className = 'question-text';
+            qTitle.innerText = q.question;
+            qBox.appendChild(qTitle);
+
+            // Container das Opções
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options-grid';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('div'); // Mudado para div para melhor controle de estilo
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                
+                // Adiciona evento de clique com feedback visual
+                btn.onclick = function() {
+                    // Remove seleção de outros
+                    const allOpts = optionsDiv.querySelectorAll('.option-btn');
+                    allOpts.forEach(el => el.classList.remove('selected'));
+                    
+                    // Adiciona seleção ao atual
+                    this.classList.add('selected');
+
+                    // Pequeno delay para o usuário perceber a seleção (Melhora UX)
+                    setTimeout(() => {
+                        nextQuestion();
+                    }, 350);
+                };
+                
+                optionsDiv.appendChild(btn);
+            });
+
+            qBox.appendChild(optionsDiv);
+            quizContent.appendChild(qBox);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            // Animação final da barra
+            progressBar.style.width = '100%';
+            
+            // Fade out do conteúdo
+            quizContent.style.opacity = '0';
+            quizHeader.style.opacity = '0';
+            
+            setTimeout(() => {
+                quizHeader.style.display = 'none';
+                quizContent.style.display = 'none';
+                quizResult.style.display = 'block';
+                
+                // Scroll suave para garantir visibilidade em telas pequenas
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
+        }
+
+        // Iniciar
+        loadQuestion();
+
+    </script>
+
+</body>
+</html>
