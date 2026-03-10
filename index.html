@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quiz: Seu Perfil de Dependência</title>
+    <title>Quiz: O Verdadeiro Custo do Vício</title>
     
     <!-- Importando Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,7 +35,6 @@
         
         body {
             font-family: var(--font-main);
-            /* Fundo moderno com profundidade */
             background-color: var(--bg-body);
             background-image: 
                 radial-gradient(at 0% 0%, hsla(172,66%,40%,0.3) 0px, transparent 50%),
@@ -52,10 +51,10 @@
         .quiz-card {
             background: var(--card-bg);
             width: 100%;
-            max-width: 600px; /* Levemente menor para focar a visão */
+            max-width: 600px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
-            padding: 40px; /* Mais respiro */
+            padding: 40px;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -83,8 +82,8 @@
         /* --- HEADER --- */
         .badge {
             display: inline-block;
-            background: #f0fdfa;
-            color: var(--primary);
+            background: #fef2f2;
+            color: var(--alert);
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -92,7 +91,7 @@
             padding: 6px 12px;
             border-radius: 50px;
             margin-bottom: 20px;
-            border: 1px solid #ccfbf1;
+            border: 1px solid #fee2e2;
         }
 
         h1 {
@@ -111,8 +110,7 @@
             font-weight: 400;
         }
 
-        .highlight-red { color: var(--alert); font-weight: 600; text-decoration: line-through; opacity: 0.7; }
-        .highlight-teal { color: var(--primary); font-weight: 700; }
+        .highlight-red { color: var(--alert); font-weight: 600; text-decoration: underline; text-decoration-color: #fca5a5; }
 
         /* --- PERGUNTAS & OPÇÕES --- */
         .question-box { display: none; }
@@ -126,6 +124,7 @@
             font-size: 1.25rem;
             margin-bottom: 25px;
             color: #0f172a;
+            line-height: 1.4;
         }
 
         .options-grid {
@@ -152,7 +151,6 @@
             justify-content: space-between;
         }
 
-        /* Círculo simulando Radio Button */
         .option-btn::after {
             content: '';
             width: 20px;
@@ -183,86 +181,126 @@
             box-shadow: inset 0 0 0 4px #fff;
         }
 
-        /* --- RESULTADO --- */
-        .result-box {
+        /* --- ESTILOS DA CALCULADORA --- */
+        .calc-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            color: #334155;
+            font-weight: 600;
+        }
+        .calc-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            font-family: var(--font-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .calc-input:focus { border-color: var(--primary); }
+        .calc-btn {
+            background: var(--alert);
+            color: #fff;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .calc-btn:hover { background: #dc2626; transform: translateY(-2px); }
+        .calc-btn-continue {
+            background: var(--primary);
+            margin-top: 15px;
+        }
+        .calc-btn-continue:hover { background: var(--primary-light); }
+        
+        .calc-result-box {
             display: none;
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            color: #991b1b;
+            padding: 25px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
             text-align: center;
-            animation: fadeIn 0.8s ease;
+            font-weight: 500;
+            font-size: 1.05rem;
+            animation: fadeIn 0.5s ease;
+        }
+        .calc-result-box .big-money {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--alert);
+            display: block;
+            margin: 5px 0 15px 0;
+        }
+
+        /* --- RESULTADO & OFERTA EXCLUSIVA --- */
+        .result-box { display: none; text-align: center; animation: fadeIn 0.8s ease; }
+
+        .exclusive-alert {
+            background: #fffbeb;
+            border: 2px dashed #f59e0b;
+            padding: 15px;
+            border-radius: 12px;
+            color: #b45309;
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+            text-align: center;
+            font-weight: 600;
+            animation: pulse-border 2s infinite;
+        }
+        .exclusive-alert span {
+            color: #dc2626;
+            font-weight: 800;
+            font-size: 1.1rem;
+            text-transform: uppercase;
         }
 
         .result-icon-container {
-            width: 80px;
-            height: 80px;
-            background: #fee2e2;
-            color: var(--alert);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            margin: 0 auto 20px auto;
+            width: 80px; height: 80px;
+            background: #fee2e2; color: var(--alert);
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            font-size: 2.5rem; margin: 0 auto 20px auto;
             animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .result-title {
-            font-size: 1.5rem;
-            color: #0f172a;
-            font-weight: 700;
-            margin-bottom: 15px;
+            font-size: 1.5rem; color: #0f172a;
+            font-weight: 800; margin-bottom: 15px;
         }
 
         .result-description {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            line-height: 1.6;
-            text-align: left;
+            font-size: 0.95rem; color: var(--text-muted);
+            margin-bottom: 30px; line-height: 1.6; text-align: left;
         }
 
         /* GRÁFICO MODERNIZADO */
         .graph-container {
-            background: #f1f5f9;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 0 0 30px 0;
-            text-align: left;
-            border: 1px solid #e2e8f0;
+            background: #f1f5f9; border-radius: 12px;
+            padding: 25px; margin: 0 0 30px 0;
+            text-align: left; border: 1px solid #e2e8f0;
         }
-        
         .graph-header {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #94a3b8;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
+            font-size: 0.8rem; text-transform: uppercase;
+            color: #94a3b8; font-weight: 700; margin-bottom: 15px;
+            display: flex; justify-content: space-between;
         }
-
         .bar-group { margin-bottom: 15px; }
         .bar-group:last-child { margin-bottom: 0; }
-
         .bar-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 6px;
+            display: flex; justify-content: space-between;
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 6px;
         }
-
-        .track {
-            width: 100%;
-            height: 12px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .fill {
-            height: 100%;
-            border-radius: 10px;
-            width: 0%; /* JS anima */
-        }
+        .track { width: 100%; height: 12px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+        .fill { height: 100%; border-radius: 10px; width: 0%; }
         .fill.low { background: #94a3b8; animation: fillLow 1.5s forwards; }
         .fill.high { 
             background: linear-gradient(90deg, #14b8a6, #0d9488); 
@@ -270,77 +308,32 @@
             box-shadow: 0 0 10px rgba(20, 184, 166, 0.5);
         }
 
-        @keyframes fillLow { to { width: 5%; } }
-        @keyframes fillHigh { to { width: 94%; } }
-
-        /* Highlight Box */
-        .highlight-box {
-            background: #f0fdfa;
-            border-left: 4px solid var(--primary);
-            padding: 15px;
-            font-size: 0.9rem;
-            color: #134e4a;
-            text-align: left;
-            font-weight: 500;
-            margin-bottom: 25px;
-            border-radius: 0 8px 8px 0;
-        }
+        @keyframes fillLow { to { width: 3%; } }
+        @keyframes fillHigh { to { width: 97%; } }
 
         /* CTA BUTTON */
         .btn-cta {
-            background: #10b981; /* Verde Success */
+            background: #10b981;
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            padding: 22px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            text-decoration: none;
+            color: white; display: flex; align-items: center; justify-content: center;
+            gap: 10px; width: 100%; padding: 22px; font-size: 1.1rem;
+            font-weight: 700; text-transform: uppercase; border: none;
+            border-radius: 12px; cursor: pointer; text-decoration: none;
             box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-            transition: transform 0.2s;
-            animation: pulse-soft 2s infinite;
+            transition: transform 0.2s; animation: pulse-soft 2s infinite;
         }
-        .btn-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.5);
-        }
+        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.5); }
 
         /* ANIMAÇÕES */
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            70% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        @keyframes pulse-soft {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes pulse-soft { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+        @keyframes pulse-border { 0% { border-color: #f59e0b; } 50% { border-color: #fef3c7; } 100% { border-color: #f59e0b; } }
 
         /* RESPONSIVO */
         @media (max-width: 480px) {
-            .quiz-card { 
-                padding: 30px 20px; 
-                border-radius: 20px;
-                min-height: 85vh; /* Mais imersivo no mobile */
-                justify-content: center;
-            }
+            .quiz-card { padding: 30px 20px; border-radius: 20px; min-height: 85vh; justify-content: center; }
             h1 { font-size: 1.5rem; }
             .option-btn { padding: 16px 20px; font-size: 0.9rem; }
         }
@@ -354,42 +347,48 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
 
-        <!-- HEADER INICIAL (Desaparece no resultado) -->
+        <!-- HEADER INICIAL -->
         <div id="quiz-header">
-            <div class="badge">Mapeamento Rápido</div>
-            <h1>Você controla o cigarro ou ele controla você?</h1>
+            <div class="badge">Atenção ao seu corpo e bolso</div>
+            <h1>O cigarro está roubando sua vida mais rápido do que você imagina?</h1>
             
             <p class="intro">
-                Descubra em 30 segundos o bloqueio mental oculto.<br>
-                Pare de nutrir o <span class="highlight-red">hábito</span> e retome o <span class="highlight-teal">controle</span>.
+                Descubra em menos de 1 minuto os danos invisíveis.<br>
+                Pare de nutrir o <span class="highlight-red">vício</span> que destrói sua saúde, seu dinheiro e a sua família.
             </p>
         </div>
 
         <!-- CONTEÚDO DINÂMICO -->
         <div id="quiz-content"></div>
 
-        <!-- TELA DE RESULTADO -->
+        <!-- TELA DE RESULTADO (COM URGÊNCIA E EXCLUSIVIDADE) -->
         <div id="quiz-result" class="result-box">
+            
+            <div class="exclusive-alert">
+                <i class="fas fa-lock" style="margin-right:5px"></i> <strong>PARABÉNS!</strong> Seu perfil foi qualificado e você é <strong>1 dos 15 selecionados</strong> hoje para uma oferta única. <br><br> Restam apenas <span>3 vagas disponíveis</span>!
+            </div>
+
             <div class="result-icon-container">
-                <i class="fas fa-brain"></i>
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
             
-            <div class="result-title">Diagnóstico: Vício Subconsciente</div>
+            <div class="result-title">Diagnóstico: Vício Subconsciente Severo</div>
             
             <div class="result-description">
-                <p>Suas respostas indicam que o cigarro se tornou uma <strong>muleta emocional</strong> enraizada na sua neurobiologia. Tentar parar apenas com "força de vontade" gera atrito mental, causando recaídas.</p>
+                <p>O ciclo é evidente: <strong>tentar parar usando apenas a "força de vontade" gera atrito mental, o que causa ansiedade e recaídas em poucos dias.</strong></p>
+                <p style="margin-top: 10px;">Além do cansaço físico diário, da falta de ar e do julgamento das pessoas que você ama, o vício virou um verdadeiro <strong style="color:var(--alert)">ralo financeiro</strong> na sua vida.</p>
+                <p style="margin-top: 10px;">O problema não é sua falta de força de vontade. É o vício agindo como uma muleta na raiz do seu cérebro. Mas nós conseguimos reprogramar isso para que você sinta <strong>nojo</strong> do cigarro em 21 dias.</p>
             </div>
             
-            <!-- Gráfico Visualmente Melhorado -->
             <div class="graph-container">
                 <div class="graph-header">
-                    <span>Probabilidade de Sucesso</span>
+                    <span>Taxa de Sucesso Definitivo</span>
                     <i class="fas fa-chart-pie"></i>
                 </div>
                 
                 <div class="bar-group">
                     <div class="bar-info">
-                        <span style="color: #64748b;">Método Tradicional</span>
+                        <span style="color: #64748b;">Adesivos / Força de Vontade</span>
                         <span>3%</span>
                     </div>
                     <div class="track"><div class="fill low"></div></div>
@@ -397,66 +396,59 @@
                 
                 <div class="bar-group" style="margin-top: 15px;">
                     <div class="bar-info">
-                        <span style="color: var(--primary);">Método Respira</span>
-                        <span style="color: var(--primary);">93%</span>
+                        <span style="color: var(--primary);">Método Respira (Reprogramação)</span>
+                        <span style="color: var(--primary);">97%</span>
                     </div>
                     <div class="track"><div class="fill high"></div></div>
                 </div>
             </div>
 
-            <div class="highlight-box">
-                <i class="fas fa-check-circle" style="margin-right:8px"></i>
-                Não lute contra o vício. Reprograme sua mente para esquecer que ele existe em 21 dias.
-            </div>
-
             <a href="https://metodolp.vercel.app/" class="btn-cta">
-                Reprogramar Minha Mente
+                Resgatar Minha Vaga Exclusiva
                 <i class="fas fa-arrow-right"></i>
             </a>
             
-            <p style="margin-top: 15px; font-size: 0.75rem; color: #94a3b8;">Acesso imediato e seguro.</p>
+            <p style="margin-top: 15px; font-size: 0.75rem; color: #94a3b8;"><i class="fas fa-shield-alt"></i> Redirecionamento 100% seguro.</p>
         </div>
 
     </div>
 
     <script>
-        // Lógica do Quiz Otimizada (Agora com 4 perguntas)
-        const questions = [
+        // Array Misto: Perguntas Múltipla Escolha + Calculadora Interativa
+        const questions =[
             {
-                question: "1. Qual sua relação com o cigarro pela manhã?",
-                options: [
-                    "É a primeira coisa que faço (em 30 min).",
-                    "Fumo logo após o café para 'ativar'.",
-                    "Consigo esperar até sair de casa.",
-                    "Sem horário fixo, fumo por estresse."
+                type: "choice",
+                question: "1. O que costuma acontecer quando você tenta parar de fumar por conta própria?",
+                options:[
+                    "Aguento uns dias, mas a abstinência me faz recair forte.",
+                    "Fico extremamente irritado(a) e acabo voltando a fumar rápido.",
+                    "Desisto na primeira situação de estresse ou pico de ansiedade.",
+                    "Tenho tanto medo da abstinência e de falhar que nunca tentei de verdade."
                 ]
             },
             {
-                question: "2. Qual é o principal gatilho que te faz fumar hoje?",
-                options: [
-                    "Estresse, ansiedade ou nervosismo.",
-                    "O cafezinho ou bebidas alcoólicas.",
-                    "Tédio ou momentos de 'pausa'.",
-                    "Sentimento de solidão ou tristeza."
+                type: "choice",
+                question: "2. Como você se sente fisicamente nas suas atividades do dia a dia?",
+                options:[
+                    "Sinto muita falta de ar, até mesmo subindo escadas pequenas.",
+                    "Me sinto constantemente cansado(a) e sem energia para nada.",
+                    "Sinto pontadas frequentes no peito e aquela tosse constante.",
+                    "Ainda disfarço bem, mas tenho muito medo das doenças no futuro."
                 ]
             },
             {
-                question: "3. O que acontece ao tentar parar?",
-                options: [
-                    "A ansiedade fica insuportável.",
-                    "Sinto que perco minha paz/relaxamento.",
-                    "Consigo uns dias, mas recaio na crise.",
-                    "Nunca tentei por medo de falhar."
+                type: "choice",
+                question: "3. Como você lida com o cheiro do cigarro e a sua família/amigos?",
+                options:[
+                    "Sinto uma vergonha profunda perto dos meus filhos/família.",
+                    "Sempre tento chupar uma bala ou lavar as mãos para esconder o cheiro.",
+                    "Evito fumar perto de não-fumantes para não sentir o olhar de reprovação.",
+                    "Finjo que não me importo, mas no fundo me sinto mal pelo vício."
                 ]
             },
             {
-                question: "4. Se pudesse desligar a vontade hoje, você faria?",
-                options: [
-                    "Sim! Não aguento mais gastar saúde.",
-                    "Com certeza, quero ser livre.",
-                    "Sim, se for natural e sem remédios.",
-                    "Tenho medo, mas preciso urgente."
-                ]
+                type: "calculator",
+                question: "4. O Custo Oculto: Você já parou para calcular o dinheiro que o cigarro queima todo mês?"
             }
         ];
 
@@ -467,50 +459,99 @@
         const quizResult = document.getElementById('quiz-result');
 
         function loadQuestion() {
-            // Atualiza barra (UX visual: começa com um pouco preenchido)
+            // Progresso Visual
             const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
             progressBar.style.width = `${progress}%`;
 
-            quizContent.innerHTML = ''; // Limpa anterior
+            quizContent.innerHTML = ''; 
 
             const q = questions[currentQuestionIndex];
             
-            // Container da pergunta com animação
             const qBox = document.createElement('div');
             qBox.className = 'question-box active';
 
-            // Texto da Pergunta
             const qTitle = document.createElement('div');
             qTitle.className = 'question-text';
             qTitle.innerText = q.question;
             qBox.appendChild(qTitle);
 
-            // Container das Opções
             const optionsDiv = document.createElement('div');
             optionsDiv.className = 'options-grid';
 
-            q.options.forEach(opt => {
-                const btn = document.createElement('div'); // Mudado para div para melhor controle de estilo
-                btn.className = 'option-btn';
-                btn.innerText = opt;
-                
-                // Adiciona evento de clique com feedback visual
-                btn.onclick = function() {
-                    // Remove seleção de outros
-                    const allOpts = optionsDiv.querySelectorAll('.option-btn');
-                    allOpts.forEach(el => el.classList.remove('selected'));
+            // Verifica se é pergunta normal ou calculadora
+            if(q.type === "choice") {
+                q.options.forEach(opt => {
+                    const btn = document.createElement('div');
+                    btn.className = 'option-btn';
+                    btn.innerText = opt;
                     
-                    // Adiciona seleção ao atual
-                    this.classList.add('selected');
+                    btn.onclick = function() {
+                        const allOpts = optionsDiv.querySelectorAll('.option-btn');
+                        allOpts.forEach(el => el.classList.remove('selected'));
+                        this.classList.add('selected');
 
-                    // Pequeno delay para o usuário perceber a seleção (Melhora UX)
-                    setTimeout(() => {
+                        setTimeout(() => { nextQuestion(); }, 350);
+                    };
+                    
+                    optionsDiv.appendChild(btn);
+                });
+            } 
+            else if (q.type === "calculator") {
+                // Injeta HTML da calculadora de choques
+                optionsDiv.innerHTML = `
+                    <label class="calc-label" for="cigPorDia">Quantos cigarros você fuma por dia?</label>
+                    <input type="number" id="cigPorDia" class="calc-input" placeholder="Ex: 15">
+                    
+                    <label class="calc-label" for="precoMaco">Qual o preço médio do maço (20 un.)? (R$)</label>
+                    <input type="number" id="precoMaco" class="calc-input" placeholder="Ex: 12.50">
+                    
+                    <button class="calc-btn" id="btnCalcular"><i class="fas fa-calculator" style="margin-right:8px"></i> Calcular Impacto Real</button>
+                    
+                    <div id="calcResultDisplay" class="calc-result-box"></div>
+                    <button class="calc-btn calc-btn-continue" id="btnContinuar" style="display:none;">Revelar Diagnóstico Final <i class="fas fa-arrow-right" style="margin-left:5px"></i></button>
+                `;
+
+                // Aplica eventos da calculadora após injetar no DOM
+                setTimeout(() => {
+                    document.getElementById('btnCalcular').onclick = function() {
+                        const cigs = parseInt(document.getElementById('cigPorDia').value);
+                        // Troca vírgula por ponto se o usuário digitar
+                        let precoStr = document.getElementById('precoMaco').value.replace(',', '.');
+                        const preco = parseFloat(precoStr);
+                        
+                        if(!cigs || !preco || cigs <= 0 || preco <= 0) {
+                            alert("Por favor, preencha os dois campos com números válidos.");
+                            return;
+                        }
+                        
+                        const custoPorCigarro = preco / 20;
+                        const gastoDiario = cigs * custoPorCigarro;
+                        const gastoMensal = gastoDiario * 30;
+                        const gasto10Anos = gastoDiario * 365 * 10;
+                        
+                        const resBox = document.getElementById('calcResultDisplay');
+                        resBox.innerHTML = `
+                            Você literalmente "queima":
+                            <span class="big-money">R$ ${gastoMensal.toFixed(2).replace('.', ',')} por mês!</span>
+                            
+                            Em 10 anos, esse vício te roubará incríveis:
+                            <span class="big-money" style="font-size: 1.5rem;">R$ ${gasto10Anos.toFixed(2).replace('.', ',')}!</span>
+                            
+                            <span style="font-size: 0.9rem; color: #7f1d1d; display:block; margin-top:10px; font-weight: 700;">
+                                O que você faria hoje com todo esse dinheiro?
+                            </span>
+                        `;
+                        
+                        resBox.style.display = 'block';
+                        this.style.display = 'none'; // Esconde botão calcular
+                        document.getElementById('btnContinuar').style.display = 'block'; // Mostra botão de avançar
+                    };
+
+                    document.getElementById('btnContinuar').onclick = function() {
                         nextQuestion();
-                    }, 350);
-                };
-                
-                optionsDiv.appendChild(btn);
-            });
+                    };
+                }, 100);
+            }
 
             qBox.appendChild(optionsDiv);
             quizContent.appendChild(qBox);
@@ -527,10 +568,8 @@
         }
 
         function finishQuiz() {
-            // Animação final da barra
             progressBar.style.width = '100%';
             
-            // Fade out do conteúdo
             quizContent.style.opacity = '0';
             quizHeader.style.opacity = '0';
             
@@ -539,15 +578,13 @@
                 quizContent.style.display = 'none';
                 quizResult.style.display = 'block';
                 
-                // Scroll suave para garantir visibilidade em telas pequenas
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 300);
         }
 
-        // Iniciar
+        // Iniciar Quiz
         loadQuestion();
 
     </script>
-
 </body>
 </html>
